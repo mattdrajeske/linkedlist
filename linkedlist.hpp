@@ -1,35 +1,39 @@
 /////////////////////////////////////////////////
-//Matt Drajeske								   //
+//Matt Drajeske								                 //
 //CS 1575 A                                    //
 //Assignment 3                                 //
 //20 October 2019                              //
 /////////////////////////////////////////////////
 
+#include <string>
 using namespace std;
 
 //Default constructor
-LinkedList(){
+template<typename T>
+LinkedList<T>::LinkedList(){
 	m_head = NULL;
-	m_back = NULL;
-	m_size = 0;
+  m_back = NULL;
+  m_size = 0;
 }
 
 /*
 	BIG THREE
 */
 //Destructor
-~LinkedList(){
-	delete m_head;
-	delete m_back;
+template<typename T>
+LinkedList<T>::~LinkedList(){
+	
 }
 
 //operator=
-const LinkedList<T>& operator=(const LinkedList<T>& rhs){
+template<typename T>
+const LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& rhs){
 	
 }
 
 //Copy Constructor
-LinkedList(const LinkedList<T>& rhs){
+template<typename T>
+LinkedList<T>::LinkedList(const LinkedList<T>& rhs){
 
 }
 
@@ -37,32 +41,47 @@ LinkedList(const LinkedList<T>& rhs){
 	ACCESSOR FUNCTIONS
 */
 //size
-int size() const{
-
+template<typename T>
+int LinkedList<T>::size() const{
+  int size = 0;
+  //LLNode<T>* test = m_head;
+  /*while(//test != NULL){
+    size++;
+    //test = test->m_next;
+  }*/
+	return size;
 }
 
 //if empty
-bool isEmpty() const{
-
+template<typename T>
+bool LinkedList<T>::isEmpty() const{
+  if(m_size == 0 && m_head == NULL){
+    return true;
+  }
+  return false;
 }
 
 //first element
-LLNode<T>* getFirstPtr(){
-
+template<typename T>
+LLNode<T>* LinkedList<T>::getFirstPtr(){
+	return m_head;
 }
 
 //constant version
-const LLNode<T>* getFirstPtr() const{
-
+template<typename T>
+const LLNode<T>* LinkedList<T>::getFirstPtr() const{
+	return m_head;
 }
 
 //last element
-LLNode<T>* getLastPtr(){
-
+template<typename T>
+LLNode<T>* LinkedList<T>::getLastPtr(){
+	return m_back;
 }
 
 //any element
-LLNode<T>* getAtPtr(int i){
+template<typename T>
+LLNode<T>* LinkedList<T>::getAtPtr(int i){
 
 }
 
@@ -70,37 +89,44 @@ LLNode<T>* getAtPtr(int i){
 	MUTATOR FUNCTIONS
 */
 //clear linked list
-void clear(){
+template<typename T>
+void LinkedList<T>::clear(){
 
 }
 
 //insert element at the front of the list
-void insert_front(const T& x){
+template<typename T>
+void LinkedList<T>::insert_front(const T& x){
 
 }
 
 //insert element at the back of the list
-void insert_back(const T& x){
+template<typename T>
+void LinkedList<T>::insert_back(const T& x){
 
 }
 
 //insert element at specified node
-void insert(const T& x, LLNode<T>* pos){
+template<typename T>
+void LinkedList<T>::insert(const T& x, LLNode<T>* pos){
 
 }
 
 //remove element from front of list
-void remove_front(){
+template<typename T>
+void LinkedList<T>::remove_front(){
 
 }
 
 //remove element from back of list
-void remove_back(){
+template<typename T>
+void LinkedList<T>::remove_back(){
 
 }
 
 //remove specified node
-void remove(LLNode<T>* pos){
+template<typename T>
+void LinkedList<T>::remove(LLNode<T>* pos){
 
 }
 
@@ -108,38 +134,45 @@ void remove(LLNode<T>* pos){
 	COMPLEX OPERATIONS
 */
 //operator==
-bool operator==(const LinkedList<T> rhs) const{
+template<typename T>
+bool LinkedList<T>::operator== (const LinkedList<T>& rhs) const{
 
 }
 
 //determine whether parameter x is in list
-LLNode<T>* find(const T& x){
+template<typename T>
+LLNode<T>* LinkedList<T>::find(const T& x){
 
 }
 
 //reverse list
-void reverse(){
+template<typename T>
+void LinkedList<T>::reverse(){
 
 }
 
 //adds one list to another
-void append(const LinkedList<T>& xlist){
+template<typename T>
+void LinkedList<T>::append(const LinkedList<T>& xlist){
 
 }
 
 //removes a section of a list
-void clip(LLNode<T>* start, LLNode<T> stop){
+template<typename T>
+void LinkedList<T>::clip(LLNode<T>* start, LLNode<T>* stop){
 
 }
 
 //makes a list into a copy of a portion of the elements of another list
-void slice(const LinkedList<T>& xlist, LLNode<T>* start, LLNode<T>* stop){
+template<typename T>
+void LinkedList<T>::slice(const LinkedList<T>& xlist, LLNode<T>* start, LLNode<T>* stop){
 
 }
 
 //Utility------------------------------------------------------------------
 //Print Linked List
 template <typename T>
-ostream& operator<<(ostream& out, const LinkedList<T>& list){
-
+std::ostream& operator<<(std::ostream& out, const LinkedList<T>& list){
+	out << "HI";
+	return out;
 }
