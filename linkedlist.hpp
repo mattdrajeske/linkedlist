@@ -11,8 +11,8 @@ using namespace std;
 //Default constructor
 template<typename T>
 LinkedList<T>::LinkedList(){
-	m_head = NULL;
   m_back = NULL;
+	m_head = m_back;
   m_size = 0;
 }
 
@@ -44,18 +44,18 @@ LinkedList<T>::LinkedList(const LinkedList<T>& rhs){
 template<typename T>
 int LinkedList<T>::size() const{
   int size = 0;
-  //LLNode<T>* test = m_head;
-  /*while(//test != NULL){
+  LLNode<T>* test = m_head;
+  while(test != m_back){
     size++;
-    //test = test->m_next;
-  }*/
+    test = test->m_next;
+  }
 	return size;
 }
 
 //if empty
 template<typename T>
 bool LinkedList<T>::isEmpty() const{
-  if(m_size == 0 && m_head == NULL){
+  if(m_size == 0){
     return true;
   }
   return false;
@@ -82,7 +82,7 @@ LLNode<T>* LinkedList<T>::getLastPtr(){
 //any element
 template<typename T>
 LLNode<T>* LinkedList<T>::getAtPtr(int i){
-
+	
 }
 
 /*
@@ -91,16 +91,23 @@ LLNode<T>* LinkedList<T>::getAtPtr(int i){
 //clear linked list
 template<typename T>
 void LinkedList<T>::clear(){
-
+	LLNode<T>* current = m_head;
+	while(current != m_back){
+		current = current->m_next;
+		delete m_head;
+	}
+	m_head = m_back;
+	delete current;
 }
 
 //insert element at the front of the list
-template<typename T>
+template<class T>
 void LinkedList<T>::insert_front(const T& x){
-
+	LLNode<T>* newnode = new LLNode<T>(x, m_head);
+	m_head = newnode;
 }
 
-//insert element at the back of the list
+//insert element at the back of the list)
 template<typename T>
 void LinkedList<T>::insert_back(const T& x){
 
