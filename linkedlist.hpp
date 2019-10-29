@@ -6,14 +6,15 @@
 /////////////////////////////////////////////////
 
 #include <string>
+#include <iostream>
 using namespace std;
 
 //Default constructor
 template<typename T>
 LinkedList<T>::LinkedList(){
-  m_back = NULL;
+	m_back = new LLNode<T>();
 	m_head = m_back;
-  m_size = 0;
+  m_size = 0; //number of elements in list
 }
 
 /*
@@ -22,7 +23,12 @@ LinkedList<T>::LinkedList(){
 //Destructor
 template<typename T>
 LinkedList<T>::~LinkedList(){
-	
+	LLNode<T>* current = m_head;
+	while(current != NULL){
+		LLNode<T>* next = current->m_next;
+		delete current;
+		current = next;
+	}
 }
 
 //operator=
@@ -43,13 +49,13 @@ LinkedList<T>::LinkedList(const LinkedList<T>& rhs){
 //size
 template<typename T>
 int LinkedList<T>::size() const{
-  int size = 0;
+  /*int size = 0;
   LLNode<T>* test = m_head;
   while(test != m_back){
     size++;
     test = test->m_next;
-  }
-	return size;
+  }*/
+	return m_size;
 }
 
 //if empty
@@ -64,6 +70,7 @@ bool LinkedList<T>::isEmpty() const{
 //first element
 template<typename T>
 LLNode<T>* LinkedList<T>::getFirstPtr(){
+
 	return m_head;
 }
 
@@ -76,6 +83,9 @@ const LLNode<T>* LinkedList<T>::getFirstPtr() const{
 //last element
 template<typename T>
 LLNode<T>* LinkedList<T>::getLastPtr(){
+	if(m_size == 0){
+		return NULL;
+	}
 	return m_back;
 }
 
@@ -91,13 +101,16 @@ LLNode<T>* LinkedList<T>::getAtPtr(int i){
 //clear linked list
 template<typename T>
 void LinkedList<T>::clear(){
-	LLNode<T>* current = m_head;
-	while(current != m_back){
-		current = current->m_next;
-		delete m_head;
+	LLNode<T>* current = m_head; //start at first element
+	LLNode<T>* next; //variable for the next element in the list
+	while(current->m_next != NULL){
+		next = current->m_next; //done to iterate through the list
+		delete current; //delete current element
+		current = next; //set current element to the next one
 	}
+	m_size = 0; //set size to 0
 	m_head = m_back;
-	delete current;
+	m_back = NULL;
 }
 
 //insert element at the front of the list
@@ -105,12 +118,19 @@ template<class T>
 void LinkedList<T>::insert_front(const T& x){
 	LLNode<T>* newnode = new LLNode<T>(x, m_head);
 	m_head = newnode;
+	m_size++;
 }
 
 //insert element at the back of the list)
 template<typename T>
 void LinkedList<T>::insert_back(const T& x){
-
+	//create new node with NULL as m_next
+	//set m_back as the newly created node
+	//LLNode<T>* newnext = new LLNode<T>();
+	LLNode<T>* newnode = new LLNode<T>(x, NULL);
+	m_back->m_next = newnode;
+	m_back = newnode;
+	m_size++;
 }
 
 //insert element at specified node
@@ -134,7 +154,7 @@ void LinkedList<T>::remove_back(){
 //remove specified node
 template<typename T>
 void LinkedList<T>::remove(LLNode<T>* pos){
-
+	
 }
 
 /*
@@ -178,8 +198,14 @@ void LinkedList<T>::slice(const LinkedList<T>& xlist, LLNode<T>* start, LLNode<T
 
 //Utility------------------------------------------------------------------
 //Print Linked List
-template <typename T>
+template <class T>
 std::ostream& operator<<(std::ostream& out, const LinkedList<T>& list){
-	out << "HI";
+	out << "[";
+	const LLNode<T>* current = list.getFirstPtr();
+	while(current-> m_next != NULL){
+		out << current->m_data << ", ";
+		current = current->m_next;
+	}
+	out << "]";
 	return out;
 }
