@@ -14,6 +14,7 @@ template<typename T>
 LinkedList<T>::LinkedList(){
 	m_head = NULL;
 	m_back = m_head;
+	//m_back->m_next = NULL;
 	m_size = 0;
 }
 
@@ -39,32 +40,58 @@ LinkedList<T>::~LinkedList(){
 //operator=
 template<typename T>
 const LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& rhs){
-	
+	//check if rhs is empty
+	if(rhs.isEmpty()){
+		m_head = NULL;
+		m_back = m_head;
+		m_size = 0;
+		return *this;
+	}
+	else{
+		m_head = new LLNode<T>(rhs.getFirstPtr()->m_data, NULL);
+		LLNode<T>* current = m_head;
+		const LLNode<T>* rhsHead = rhs.getFirstPtr();
+		const LLNode<T>* rhsCurrent = rhsHead;
+		while(rhsCurrent->m_next != NULL){
+			current->m_next = new LLNode<T>(rhsCurrent->m_next->m_data, NULL);
+			current = current->m_next;
+			rhsCurrent = rhsCurrent->m_next;
+		}
+		m_size = rhs.size();
+	}
+	return *this;
 }
 
 //Copy Constructor
 template<typename T>
 LinkedList<T>::LinkedList(const LinkedList<T>& rhs){
-/*	//LinkedList<T> r = new LinkedList<T>();
-	
-	//if rhs is empty
-	if(rhs.isEmpty()){
-		m_head = NULL;
-		m_back = m_head;
-		m_size = 0;
-	}
-
-	//if rhs is not empty
-	//m_head = new LLNode<T>();
-	LLNode<T>* current = m_head;
-
-	//what does m_head need to be assigned to?
-	for(int i = 0; i < rhs.size(); i++){
-		current = new LLNode<T>(rhs.getAtPtr(i)->m_data, current->m_next);
-		if(current->m_next != NULL){
-			current = current->m_next;
+	//don't want new list in the same address as rhs
+	if(this != &rhs){
+		//check if rhs is empty
+		if(rhs.isEmpty()){
+				m_head = NULL;
+				m_back = m_head;
+				m_size = 0;
 		}
-	}*/
+		else{
+			m_head = new LLNode<T>(rhs.getFirstPtr()->m_data, NULL);
+			//to iterate through new list
+			LLNode<T>* current = m_head;
+
+			//to iterate through rhs
+			const LLNode<T>* rhsHead = rhs.getFirstPtr();
+			const LLNode<T>* rhsCurrent = rhsHead;
+
+			//loop
+			while(rhsCurrent->m_next != NULL){
+				current->m_next = new LLNode<T>(rhsCurrent->m_next->m_data, NULL);
+				current = current->m_next;
+				rhsCurrent = rhsCurrent->m_next;	
+			}
+			//change size
+			m_size = rhs.size();
+		}
+	}
 }
 
 /*
@@ -103,6 +130,9 @@ const LLNode<T>* LinkedList<T>::getFirstPtr() const{
 //last element
 template<typename T>
 LLNode<T>* LinkedList<T>::getLastPtr(){
+	if(isEmpty()){
+		return NULL;
+	}
 	LLNode<T>* current = m_head;
 	while(current->m_next != NULL){
 		current = current->m_next;
@@ -114,11 +144,12 @@ LLNode<T>* LinkedList<T>::getLastPtr(){
 //any element
 template<typename T>
 LLNode<T>* LinkedList<T>::getAtPtr(int i){
-	/*cout << "getAtPtr function needs to be fixed" << endl;
-	return m_head;*/
 	LLNode<T>* current = m_head;
-	for(int k = 0; k < i-1; k++){
+	for(int k = 0; k < i; k++){
 		current = current->m_next;
+		if(current == NULL){
+			return NULL;
+		}
 	}
 	return current;
 }
@@ -184,7 +215,7 @@ void LinkedList<T>::insert(const T& x, LLNode<T>* pos){
 		current = current->m_next;
 	}
 	if(!flag){
-		cout << "! ERROR ! Position was not found!" << endl;
+		cout << "0x0" << endl;
 	}
 }
 
@@ -202,7 +233,7 @@ template<typename T>
 void LinkedList<T>::remove_back(){
 	//if list is empty
 	if(isEmpty()){
-		cout << "! ERROR ! list is empty" << endl;
+		return;
 	}
 
 	//if list is size 1
@@ -244,7 +275,7 @@ void LinkedList<T>::remove(LLNode<T>* pos){
 		current = current->m_next;
 	}
 	if(!flag){
-		cout << "! ERROR ! Position was not found!" << endl;
+		cout << "ERROR ! Position was not found!" << endl;
 	}
 }
 
@@ -286,7 +317,7 @@ LLNode<T>* LinkedList<T>::find(const T& x){
 
 	//if not found
 	if(!flag){
-		cout << "! ERROR ! element was not found" << endl;
+		//cout << "!-- ERROR: LinkedList::find(), element was not found" << endl;
 		return NULL;
 	}
 }
@@ -294,42 +325,106 @@ LLNode<T>* LinkedList<T>::find(const T& x){
 //reverse list
 template<typename T>
 void LinkedList<T>::reverse(){
+	//check if empty
+	if(isEmpty()){
+		return;
+	}
 
+	//current is the node currently pointed at, starts at head
+	//prev is the node before current
+	//next is the node after current
+	LLNode<T>* current = m_head;
+	LLNode<T>* prev = NULL;
+	LLNode<T>* next = NULL;
+
+	while(current != NULL){
+		next = current->m_next;
+		current->m_next = prev;
+		prev = current;
+		current = next;
+	}
+	m_head = prev;
 }
 
 //adds one list to another
 template<typename T>
 void LinkedList<T>::append(const LinkedList<T>& xlist){
+	//check if xlist is empty
+	if(xlist.isEmpty()){
+		return;
+	}
 
+	//get last ptr in this
+	LLNode<T>* current = m_head;
+	while(current->m_next != NULL){
+		current = current->m_next;
+	}
+	
+	//get first ptr in xlist
+	const LLNode<T>* xHead = xlist.getFirstPtr();
+	const LLNode<T>* xCurrent = xHead;
+
+	//tacks on the elements of xlist to this
+	while(xCurrent->m_next != NULL){
+		current->m_next = new LLNode<T>(xCurrent->m_data, NULL);
+		current = current->m_next;
+		xCurrent = xCurrent->m_next;
+	}
+	current->m_next = new LLNode<T>(xCurrent->m_data, NULL);
+
+	//adjust size
+	m_size += xlist.size();
 }
 
 //removes a section of a list
 template<typename T>
 void LinkedList<T>::clip(LLNode<T>* start, LLNode<T>* stop){
+	//temp points to the node before start
+	LLNode<T>* temp = m_head;
+	while(temp->m_next != start){
+		temp = temp->m_next;
+	}
 
+	//garbage represents the nodes that are about to be destroyed
+	LLNode<T>* garbage = temp->m_next;
+	LLNode<T>* next;
+	while(garbage != stop->m_next){
+		next = garbage->m_next;
+		delete garbage;
+		garbage = next;
+		m_size--;
+	}
+	temp->m_next = next;
 }
 
 //makes a list into a copy of a portion of the elements of another list
 template<typename T>
 void LinkedList<T>::slice(const LinkedList<T>& xlist, LLNode<T>* start, LLNode<T>* stop){
+	//check if empty, error if so
+	if(xlist.isEmpty()){
+		cout << "!-- ERROR in LinkedList::slice(): list is empty" << endl;
+		return;
+	}
 
+	//make sure this is empty to avoid memory leak
+	this->clear();
+
+	
 }
 
 //Utility------------------------------------------------------------------
 //Print Linked List
 template <class T>
 std::ostream& operator<<(std::ostream& out, const LinkedList<T>& list){
-	out << "[";
+	out << "[ ";
 	if(!list.isEmpty()){
 		const LLNode<T>* current = list.getFirstPtr();
 		while(current->m_next != NULL){
 			out << current->m_data << ", ";
-			current = current->m_next;
-			
+			current = current->m_next;	
 		}
 		out << current->m_data << ", ";
 	}
 	out << "]";
-	/*out << "\nThe problem with the out function, and many other functions in this class, \nis that current->m_next is always null on the last element in the list.\npls fix";*/
 	return out;
 }
