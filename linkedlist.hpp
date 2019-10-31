@@ -387,7 +387,7 @@ void LinkedList<T>::clip(LLNode<T>* start, LLNode<T>* stop){
 
 	//garbage represents the nodes that are about to be destroyed
 	LLNode<T>* garbage = temp->m_next;
-	LLNode<T>* next;
+	LLNode<T>* next = garbage;
 	while(garbage != stop->m_next){
 		next = garbage->m_next;
 		delete garbage;
@@ -409,7 +409,43 @@ void LinkedList<T>::slice(const LinkedList<T>& xlist, LLNode<T>* start, LLNode<T
 	//make sure this is empty to avoid memory leak
 	this->clear();
 
-	
+	//xHead represents the first element in xlist
+	//xCurrent represents the current element pointed at in xlist
+	//current represents the current element pointed at in this
+	//if flag is true, that means xlist can begin being copied onto this
+	const LLNode<T>* xHead = xlist.getFirstPtr();
+	const LLNode<T>* xCurrent = xHead;
+	LLNode<T>* current = m_head;
+	bool flag = false;
+	while(xCurrent != stop->m_next){
+		//if start and stop are found...
+		if(start == xCurrent){
+			//change value of head
+			m_head = new LLNode<T>(xCurrent->m_data, NULL);
+			current = m_head;
+			flag = true;
+			m_size++;
+		}else if(flag){
+			current->m_next = new LLNode<T>(xCurrent->m_data, NULL);
+
+			//iterate when between start and stop
+			current = current->m_next;
+
+			//change size
+			m_size++;
+		}
+		
+		//iterate
+		xCurrent = xCurrent->m_next;
+	}
+
+	/*make this into a slice between start and stop
+	LLNode<T>* current = m_head;
+	while(current != stop->m_next){
+		current = new LLNode<T>(current->m_data, current->m_next);
+		current = current->m_next;
+	}*/
+
 }
 
 //Utility------------------------------------------------------------------
