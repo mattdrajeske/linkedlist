@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////
-//Matt Drajeske								                 //
+//Matt Drajeske								   //
 //CS 1575 A                                    //
 //Assignment 3                                 //
 //20 October 2019                              //
