@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////
-//Matt Drajeske								   //
-//CS 1575 A                                    //
-//Assignment 3                                 //
-//20 October 2019                              //
+//Matt Drajeske								   
+//CS 1575 A                                    
+//Assignment 3                                 
+//20 October 2019                              
 /////////////////////////////////////////////////
 
 #include <string>
